@@ -1,0 +1,157 @@
+.material-design {
+    position: relative;
+    margin-bottom: 25px;
+    select,
+    input,
+    button {
+        overflow: hidden;
+        display: block;
+        border: none;
+        border-bottom: 1px solid #757575a1;
+        background: none;
+        border-radius: 0;
+        color: #fff;
+        width: 100%;
+        padding: 5px 10px;
+        outline: none;
+        appearance: none;
+        option {
+            appearance: none;
+            border: none;
+            background: #21282c;
+            color: rgb(211, 211, 211);
+            height: 20px;
+             :hover {
+                background: #535455;
+            }
+        }
+    }
+    select {
+        background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/png/arrow_select.png) right no-repeat;
+        background-size: 10px;
+        &:focus {
+            background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/png/arrow_select_reverse.png) right no-repeat;
+            background-size: 10px;
+        }
+        &:valid {
+            background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/svg/checked.svg) right no-repeat;
+            background-size: 20px;
+        }
+    }
+    select:focus,
+    input:focus {
+        outline: none;
+    }
+    input:valid {
+        background: none;
+    }
+    select:focus~label,
+    select:valid~label,
+    input:focus~label,
+    input:valid~label {
+        top: -15px;
+        font-size: .7em;
+        background: none;
+    }
+    button,
+    input[type="submit"],
+    &.alert {
+        color: rgb(136, 136, 136);
+        border: 1px solid rgba(221, 221, 221, 0.1);
+        border-radius: 3px;
+        transition: all 0.2s ease-in-out;
+        background: none;
+        font-size: .9em;
+        &:hover {
+            color: rgb(255, 255, 255);
+            background: rgba(221, 221, 221, 0.1);
+        }
+        &.danger {
+            color: rgb(75, 11, 11);
+            border: 1px solid rgba(109, 23, 23, 0.1);
+            background: rgb(150, 56, 56);
+            &:hover {
+                color: rgb(216, 135, 135);
+                background: rgb(138, 17, 17);
+            }
+        }
+        &.info {
+            color: rgb(98, 162, 199);
+            border: 1px solid rgba(94, 124, 179, 0.1);
+            background: rgb(24, 86, 179);
+            &:hover {
+                color: rgb(171, 175, 207);
+                background: rgb(27, 59, 109);
+            }
+        }
+        &.success {
+            color: rgb(194, 223, 185);
+            border: 1px solid rgba(47, 109, 23, 0.1);
+            background: rgb(57, 158, 48);
+            &:hover {
+                color: rgb(153, 201, 139);
+                background: rgb(33, 107, 26);
+            }
+        }
+        &.warning {
+            color: rgb(70, 64, 9);
+            border: 1px solid rgba(139, 128, 28, 0.1);
+            background: rgb(168, 166, 34);
+            &:hover {
+                color: rgb(216, 211, 163);
+                background: rgb(124, 112, 5);
+            }
+        }
+    }
+    &.alert {
+        text-align: center;
+    }
+    label {
+        color: #999;
+        font-size: 1em;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 5px;
+        top: 10px;
+        transition: 0.3s ease all;
+        -moz-transition: 0.3s ease all;
+        -webkit-transition: 0.3s ease all;
+    }
+    .bar {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+    .bar:before,
+    .bar:after {
+        content: '';
+        height: 2px;
+        width: 0;
+        bottom: 1px;
+        position: absolute;
+        background: rgb(73, 153, 140);
+        transition: 0.3s ease all;
+        -moz-transition: 0.3s ease all;
+        -webkit-transition: 0.3s ease all;
+        opacity: 0;
+    }
+    .bar:before {
+        left: 50%;
+        opacity: 1;
+    }
+    .bar:after {
+        right: 50%;
+        opacity: 1;
+    }
+    select:not(:focus)~.bar,
+    input:not(:focus)~.bar {
+        opacity: 0;
+    }
+    select:focus~.bar:before,
+    select:focus~.bar:after,
+    input:focus~.bar:before,
+    input:focus~.bar:after {
+        width: 50%;
+    }
+}
