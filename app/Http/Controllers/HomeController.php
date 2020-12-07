@@ -25,6 +25,10 @@ class HomeController extends Controller
                         ->select('id','name')  
                         ->orderByRaw('id ASC')         
                         ->get();
+
+        if(!$systems || !$functions){
+            return redirect()->route('error');
+        }
        
         return view('template_auth.login.index',[
             'uri_system'=>$uri_system,

@@ -1,5 +1,8 @@
 $(function() {
-   
+
+    /**
+     * ao trocar de form
+     */
     $(".form-change").click(function(e) {
         e.preventDefault();
         var button = $(this);
@@ -30,11 +33,12 @@ $(function() {
     });
 
 
+    /**
+     * submit dos forms da tela incial
+     */
     $('form').submit(function(e) {
         e.preventDefault();
         var form = $(this);
-
-        $('.alert-back').html('').removeClass('danger success info warning');
 
         $.ajax({
                 url: form.attr('action'),
@@ -42,16 +46,32 @@ $(function() {
                 data: form.serialize(),
                 dataType: "json",
                 beforeSend: function() {
-                    $('.alert-back').html('carregando...');
+
+                    $('form .alert-back').removeClass('animate__animated animate__fadeInUp');
+                    $('form .alert-back').addClass('animate__animated animate__fadeOutDown');
+                    $('form .alert-back').html('').removeClass('danger success info warning');
+
+                    $('.row.content .left').addClass('contentLoader');
+                    $('.row.content .left').prepend(screenLoader(''));
+                    // $('body').prepend(screenLoader(''));
                 }
             })
             .done(function(response) {
 
-                if (response.message) {
-                    $('.alert-back').html(response.message).addClass(response.status);
-                }
+                setTimeout(() => {
+                    if (response.message) {
+                        $('.alert-back').html(response.message).addClass(response.status);
+                    }
 
-                $('form .alert-back').show();
+                    removeScreenLoader();
+
+                    $('form .alert-back').show();
+                    $('form .alert-back').removeClass('animate__fadeOutDown').addClass('animate__animated animate__fadeInUp');
+
+
+                }, 1000);
+
+
             })
             .fail(function(jqXHR, textStatus, msg) {
                 $('.alert-back').html(msg).addClass('danger');
