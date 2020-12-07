@@ -2,17 +2,7 @@
 @section('title', $uri_system)
 @section('content')
 
-<!-- <div class='screenLoader white'>
-  <div class='content'>
-    <div class="loader">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <div class='content'>carregando...</div>
-  </div>
-</div> -->
+git
 
 <div class='box-container'>
 
