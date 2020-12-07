@@ -6,3 +6,5 @@
 
 App para unificar as autenticações dos sistemas desenvolvidos do setor relatorios.
 
+Ao clonar rodar os comandos: composer update, npm install.
+
