@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+// Route::middleware('api')->get('/session/{uri}', 'SessionController@session')->name('session');   
+
+
+// Route::namespace('API')->name('api.')->group(function() {
+    // Route::get('/session/{uri}','SessionController@session')->name('session');   
+// });
+
+
+Route::group(['namespace'=>'api','as'=>'api.'], function(){
+    Route::apiResource('/session', 'SessionController');
 });

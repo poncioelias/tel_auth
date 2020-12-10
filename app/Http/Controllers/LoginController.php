@@ -151,24 +151,42 @@ class LoginController extends Controller
         }     
  
 
-        Session::put(
-            $login_data[0]->uri,
-            [
-            'logged' => '1',
-            'logged_in' => date('Y-m-d H:i:s'),
-            'logged_up' => date('Y-m-d H:i:s'),
-            'page_access_now' => '',
-            'link' => $login_data[0]->link,
-            'idtel'=> $login_data[0]->idtel,
-            'name'=> $login_data[0]->name,
-            'email'=> $login_data[0]->email,
-            'email_confirmation'=> $login_data[0]->email_confirmation,
-            'reset_passwd'=> $login_data[0]->reset_passwd,
-            'profile'=> $login_data[0]->profile,
-            'profile_description'=> $login_data[0]->profile_description,
-            'function'=> $login_data[0]->function,
+        // Session::put(
+        //     $login_data[0]->uri,
+        //     [
+        //     'logged' => '1',
+        //     'logged_in' => date('Y-m-d H:i:s'),
+        //     'logged_up' => date('Y-m-d H:i:s'),
+        //     'page_access_now' => '',
+        //     'link' => $login_data[0]->link,
+        //     'idtel'=> $login_data[0]->idtel,
+        //     'name'=> $login_data[0]->name,
+        //     'email'=> $login_data[0]->email,
+        //     'email_confirmation'=> $login_data[0]->email_confirmation,
+        //     'reset_passwd'=> $login_data[0]->reset_passwd,
+        //     'profile'=> $login_data[0]->profile,
+        //     'profile_description'=> $login_data[0]->profile_description,
+        //     'function'=> $login_data[0]->function,
+        //     ]
+        // );
+
+        $SESSION = [
+            $login_data[0]->uri=>    [
+                'logged' => '1',
+                'logged_in' => date('Y-m-d H:i:s'),
+                'logged_up' => date('Y-m-d H:i:s'),
+                'page_access_now' => '',
+                'link' => $login_data[0]->link,
+                'idtel'=> $login_data[0]->idtel,
+                'name'=> $login_data[0]->name,
+                'email'=> $login_data[0]->email,
+                'email_confirmation'=> $login_data[0]->email_confirmation,
+                'reset_passwd'=> $login_data[0]->reset_passwd,
+                'profile'=> $login_data[0]->profile,
+                'profile_description'=> $login_data[0]->profile_description,
+                'function'=> $login_data[0]->function,
             ]
-        );
+            ];
     
 
 
@@ -176,7 +194,7 @@ class LoginController extends Controller
         $json['status'] = 'success';
 
         if( $login_data[0]->reset_passwd == 0)
-            $json['redirect'] = route('session',$login_data[0]->uri,);
+            $json['redirect'] = route('api.session.index', $SESSION );
         else    
             $json['redirect'] = route('resetpasswd');
         return response()->json($json);          
