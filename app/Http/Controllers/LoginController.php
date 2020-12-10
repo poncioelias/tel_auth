@@ -125,7 +125,8 @@ class LoginController extends Controller
                                 PRF.description profile_description,
                                 SYS.id id_system,
                                 SYS.name system,
-                                SYS.uri uri
+                                SYS.uri uri,
+                                SYS.link link
 
                             FROM _users.tbl_users USR
                             INNER JOIN _users.tbl_users_functions FUNC ON(FUNC.id = USR.id_function)
@@ -157,6 +158,7 @@ class LoginController extends Controller
             'logged_in' => date('Y-m-d H:i:s'),
             'logged_up' => date('Y-m-d H:i:s'),
             'page_access_now' => '',
+            'link' => $login_data[0]->link,
             'idtel'=> $login_data[0]->idtel,
             'name'=> $login_data[0]->name,
             'email'=> $login_data[0]->email,
@@ -174,7 +176,7 @@ class LoginController extends Controller
         $json['status'] = 'success';
 
         if( $login_data[0]->reset_passwd == 0)
-            $json['redirect'] = route('home');
+            $json['redirect'] = route('session',$login_data[0]->uri,);
         else    
             $json['redirect'] = route('resetpasswd');
         return response()->json($json);          

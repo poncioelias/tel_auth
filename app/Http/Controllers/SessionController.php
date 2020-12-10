@@ -9,15 +9,27 @@ use Illuminate\Support\Facades\Session;
 class SessionController extends Controller
 {
 
+    /**
+     * view: retorna dados da sessao em json
+     *
+     * @param Request $request
+     * @return void
+     */
     public static function session(Request $request)
-    {
-        echo '<pre>';
-        if( $request ) {
-            echo var_dump($request->session());
+    {                
+        if( $request->session()->get($request->uri)) {           
+
+            Session::put( $request->uri.".logged_up" , date('Y-m-d H:i:s') );
+       
+            echo json_encode($request->session()->get($request->uri),JSON_UNESCAPED_UNICODE);
         }else{
-            echo "Session not exist";
-        }
+            Session::flush();
+            return redirect("/$request->uri");
+        }          
     }
+
+
+    
 
     // public static function storeSession(stdClass $sessionData)
     // {        

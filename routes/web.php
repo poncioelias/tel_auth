@@ -10,8 +10,7 @@ Route::get('/error',function(){
   return view('template_auth.error.index');
 });
 
-Route::get('/session','SessionController@session')->name('session.get');
-Route::get('/setsession','SessionController@storeSession')->name('session.set');
+Route::get('/session/{uri}','SessionController@session')->name('session');
 
 Route::get('/{id_system?}','LoginController@index')->name('home');
 Route::get('/redefinicao','LoginController@resetpasswd')->name('resetpasswd');
