@@ -10,10 +10,17 @@ Route::get('/error',function(){
   return view('template_auth.error.index');
 });
 
-Route::get('/{id_system?}','HomeController@index')->name('home');
-Route::post('/login','HomeController@login')->name('login');
-Route::post('/register','HomeController@register')->name('register');
-Route::post('/recover','HomeController@recover')->name('recover');
+Route::get('/session','SessionController@session')->name('session.get');
+Route::get('/setsession','SessionController@storeSession')->name('session.set');
+
+Route::get('/{id_system?}','LoginController@index')->name('home');
+Route::get('/redefinicao','LoginController@resetpasswd')->name('resetpasswd');
+
+Route::post('/login','LoginController@login')->name('login');
+Route::post('/register','LoginController@register')->name('register');
+Route::post('/recover','LoginController@recover')->name('recover');
+
+
 
 
 

@@ -27,7 +27,7 @@
 
         <div class='logo animate__animated animate__fadeIn'> <img src='{{ asset('storage/svg/tel_black.svg') }}'> </div>
 
-        <div class='footer'>App Autenticação. Desenvolvido pelo setor Apoio Técnico. Versão {{ env('APP_VERSION') }}</div>
+        <div class='footer'>App Autenticação. Desenvolvido pela equipe GSO. Versão {{ env('APP_VERSION') }}</div>
         
       </div>
 

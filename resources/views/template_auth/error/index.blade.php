@@ -10,7 +10,7 @@
 
       <div class="left order-2 order-md-1 order-lg-1 col-12 col-md-6 col-lg-6">
         <div class=''>
-          <h1>Oops!</h1>
+          <h1>Oops!</h1>        
           Está página não foi encontrada ou está fora do ar!
         </div>
     

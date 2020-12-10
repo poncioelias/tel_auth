@@ -1,7 +1,7 @@
 /**
  * envolve a pagina ou elemento com o loader
  * @param {*} content 
- * @param {*} style // white | black
+ * @param {*} style // white | ''
  */
 window.screenLoader = function(content = 'carregando...', style = '') {
     return `

@@ -1,7 +1,7 @@
 
 <form id='' method='POST' action='{{ url('login') }}'>
 
-  @csrf
+
   
   <div class='title mb-3'>Login</div>
 
@@ -9,7 +9,7 @@
     <select class="" id='system' name="system" id="system" aria-describedby="system" required>
       <option></option>
       @foreach($systems as $item)
-        <option value='1' {{ $item->uri == $uri_system ? 'SELECTED' :'' }}> {{ $item->name  }} </option>
+        <option value='{{ $item->id }}' {{ $item->uri == $uri_system ? 'SELECTED' :'' }}> {{ $item->name  }} </option>
       @endforeach      
     </select>    
     <span class='bar'></span>   

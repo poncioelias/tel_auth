@@ -1,6 +1,15 @@
 $(function() {
 
     /**
+     * pega o token na tag head
+     */
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    /**
      * ao trocar de form
      */
     $(".form-change").click(function(e) {
@@ -34,7 +43,7 @@ $(function() {
 
 
     /**
-     * submit dos forms da tela incial
+     * submit dos forms da tela inicial
      */
     $('form').submit(function(e) {
         e.preventDefault();
@@ -44,7 +53,7 @@ $(function() {
                 url: form.attr('action'),
                 type: form.attr('method'),
                 data: form.serialize(),
-                dataType: "json",
+                dataType: "JSON",
                 beforeSend: function() {
 
                     $('form .alert-back').removeClass('animate__animated animate__fadeInUp');
@@ -58,24 +67,24 @@ $(function() {
             })
             .done(function(response) {
 
-                setTimeout(() => {
-                    if (response.message) {
-                        $('.alert-back').html(response.message).addClass(response.status);
-                    }
+                if (response.message) {
+                    $('.alert-back').html(response.message).addClass(response.status);
+                }
 
-                    removeScreenLoader();
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
 
-                    $('form .alert-back').show();
-                    $('form .alert-back').removeClass('animate__fadeOutDown').addClass('animate__animated animate__fadeInUp');
-
-
-                }, 1000);
-
+                removeScreenLoader();
+                $('form .alert-back').show();
+                $('form .alert-back').removeClass('animate__fadeOutDown').addClass('animate__animated animate__fadeInUp');
 
             })
             .fail(function(jqXHR, textStatus, msg) {
                 $('.alert-back').html(msg).addClass('danger');
                 $('form .alert-back').show();
+                $('form .alert-back').removeClass('animate__fadeOutDown').addClass('animate__animated animate__fadeInUp');
+                removeScreenLoader();
             });
 
     });
