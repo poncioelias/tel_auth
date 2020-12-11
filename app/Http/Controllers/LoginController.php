@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use \Illuminate\Support\Facades\DB;
-use \Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\Console\Input\Input;
+use Illuminate\Auth\Events\Login;
 
 
 class LoginController extends Controller
@@ -17,6 +22,15 @@ class LoginController extends Controller
      */
     public function index(string $uri_system = null)
     {   
+        // $user = User::where('id',1)->first();
+        // $user->passwd = bcrypt('123');
+        // $user->save();
+
+        
+        $user = Auth::user();
+
+        // var_dump($user);
+        
 
         $systems = DB::table('_users.tbl_systems')
                         ->select('*')  
@@ -38,6 +52,131 @@ class LoginController extends Controller
             'functions'=>$functions
             ]);
     }
+
+    /**
+     * post: login
+     *
+     * @return void
+     */
+    public function store(Request $request)
+    {     
+        if( in_array('',$request->only('id_system','idtel', 'password')) ){
+            $json['message'] = 'Campo(s) sem preenchimento. Verifique!';
+            $json['status'] = 'warning';
+            return response()->json($json);
+        }    
+
+        $credentials = [
+            'id_system'=>$request->id_system,
+            'idtel'=>$request->idtel,
+            'password'=>$request->passwd,
+        ];
+
+        // $password = Hash::make($request->passwd);
+        // var_dump($credentials);
+        // var_dump(Hash::check($request->passwd, $password ));
+       
+
+
+        if(!Auth::attempt($credentials) ){
+            // var_dump(Auth::attempt($credentials));
+            $json['message'] = 'Usuário e/ou senha inválido(s)!';
+            $json['status'] = 'warning';
+            return response()->json($json);
+        }
+
+
+        $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
+        $json['status'] = 'success';     
+        $json['redirect'] = route('login.logged');
+        return response()->json($json);
+        
+
+
+        // $login_data = Login::where([
+        //     'id_system'=>$request->system,
+        //     'idtel'=>$request->idtel,
+        //     'passwd'=>$request->password
+        //     ])->first();
+   
+
+        // if( !$login_data ){
+        //     $json['message'] = 'Usuário e/ou senha inválido(s)!';
+        //     $json['status'] = 'warning';
+        //     return response()->json($json);
+        // }   
+
+        
+        // $request->authenticate();
+
+        // $request->session()->regenerate();
+
+        // var_dump( $request->authenticate());
+
+        // return redirect(RouteServiceProvider::HOME);
+
+
+        // $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
+        // $json['status'] = 'success';
+
+        // if( $login_data->reset_passwd == 0)
+        //     $json['redirect'] = route('login.logged');
+        // else    
+        //     $json['redirect'] = route('login.resetpasswd');
+
+        // return response()->json($json);        
+        
+       
+
+        // $SESSION = [
+        //     $login_data->uri => [
+        //         'logged' => '1',
+        //         'logged_in' => date('Y-m-d H:i:s'),
+        //         'logged_up' => date('Y-m-d H:i:s'),
+        //         'page_access_now' => '',
+        //         'link' => $login_data->link,
+        //         'idtel'=> $login_data->idtel,
+        //         'name'=> $login_data->name,
+        //         'email'=> $login_data->email,
+        //         'email_confirmation'=> $login_data->email_confirmation,
+        //         'reset_passwd'=> $login_data->reset_passwd,
+        //         'profile'=> $login_data->profile,
+        //         'profile_description'=> $login_data->profile_description,
+        //         'function'=> $login_data->function,
+        //     ]
+        // ];
+    
+
+
+        // $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
+        // $json['status'] = 'success';
+
+        // if( $login_data->reset_passwd == 0)
+        //     $json['redirect'] = route('login.logged', $SESSION );
+        // else    
+        //     $json['redirect'] = route('login.resetpasswd');
+        // return response()->json($json);          
+    }
+
+    /**
+     * destroy a sessao autenticada
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+
+    
 
     /**
      * post: register
@@ -95,108 +234,5 @@ class LoginController extends Controller
        echo 'resetpasswd';
     }
 
-    /**
-     * post: login
-     *
-     * @return void
-     */
-    public function login(Request $request)
-    {     
-        if( in_array('',$request->only('system','idtel', 'password')) ){
-            $json['message'] = 'Campo(s) sem preenchimento. Verifique!';
-            $json['status'] = 'warning';
-            return response()->json($json);
-        }    
-        
-        
-        $login_data =  DB::select(
-                        DB::raw("
-                            SELECT 
-                                USR.id,
-                                USR.name,
-                                USR.idtel,
-                                USR.passwd,
-                                USR.email,
-                                USR.email_confirmation,
-                                USR.reset_passwd,
-                                FUNC.name function,
-                                PRF.id id_profile,
-                                PRF.name profile,
-                                PRF.description profile_description,
-                                SYS.id id_system,
-                                SYS.name system,
-                                SYS.uri uri,
-                                SYS.link link
 
-                            FROM _users.tbl_users USR
-                            INNER JOIN _users.tbl_users_functions FUNC ON(FUNC.id = USR.id_function)
-                            INNER JOIN _users.tbl_users_profiles PRF ON(PRF.id = USR.id_profile)
-                            INNER JOIN _users.tbl_users_systems USRSYS ON(USRSYS.id_user = USR.id)
-                            INNER JOIN _users.tbl_systems SYS ON(SYS.id = USRSYS.id_system)
-                            WHERE 
-                                SYS.id = :system
-                                AND idtel = :idtel
-                                AND passwd = :passwd
-                        "),[
-                            'system'=>$request->system,
-                            'idtel'=>$request->idtel,
-                            'passwd'=>$request->password,
-                        ]
-            );
-
-        if( !$login_data ){
-            $json['message'] = 'Usuário e/ou senha inválido(s)!';
-            $json['status'] = 'warning';
-            return response()->json($json);
-        }     
- 
-
-        // Session::put(
-        //     $login_data[0]->uri,
-        //     [
-        //     'logged' => '1',
-        //     'logged_in' => date('Y-m-d H:i:s'),
-        //     'logged_up' => date('Y-m-d H:i:s'),
-        //     'page_access_now' => '',
-        //     'link' => $login_data[0]->link,
-        //     'idtel'=> $login_data[0]->idtel,
-        //     'name'=> $login_data[0]->name,
-        //     'email'=> $login_data[0]->email,
-        //     'email_confirmation'=> $login_data[0]->email_confirmation,
-        //     'reset_passwd'=> $login_data[0]->reset_passwd,
-        //     'profile'=> $login_data[0]->profile,
-        //     'profile_description'=> $login_data[0]->profile_description,
-        //     'function'=> $login_data[0]->function,
-        //     ]
-        // );
-
-        $SESSION = [
-            $login_data[0]->uri=>    [
-                'logged' => '1',
-                'logged_in' => date('Y-m-d H:i:s'),
-                'logged_up' => date('Y-m-d H:i:s'),
-                'page_access_now' => '',
-                'link' => $login_data[0]->link,
-                'idtel'=> $login_data[0]->idtel,
-                'name'=> $login_data[0]->name,
-                'email'=> $login_data[0]->email,
-                'email_confirmation'=> $login_data[0]->email_confirmation,
-                'reset_passwd'=> $login_data[0]->reset_passwd,
-                'profile'=> $login_data[0]->profile,
-                'profile_description'=> $login_data[0]->profile_description,
-                'function'=> $login_data[0]->function,
-            ]
-            ];
-    
-
-
-        $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
-        $json['status'] = 'success';
-
-        if( $login_data[0]->reset_passwd == 0)
-            $json['redirect'] = route('api.session.index', $SESSION );
-        else    
-            $json['redirect'] = route('resetpasswd');
-        return response()->json($json);          
-    }
 }

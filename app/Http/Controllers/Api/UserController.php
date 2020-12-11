@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
-
-class SessionController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {               
-        echo json_encode( $request->all(), JSON_UNESCAPED_UNICODE); 
+    public function index()
+    {
+        return User::where('id',1)->first();
     }
 
     /**

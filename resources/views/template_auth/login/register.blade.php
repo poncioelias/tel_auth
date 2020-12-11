@@ -1,12 +1,12 @@
 
-<form id='' method='POST' action='{{ url('register') }}'>
+<form  method='POST' action='{{ url('register') }}'>
 
   @csrf
 
   <div class='title mb-3'>Novo acesso</div>
 
   <div class="material-design">    
-    <select class="" id='system' name="system" id="system" aria-describedby="system" required>
+    <select class=""  name="system"  aria-describedby="system" required>
       <option></option>
       @foreach($systems as $item)
         <option value='1' {{ $item->uri == $uri_system ? 'SELECTED' :'' }}> {{ $item->name  }} </option>
@@ -18,7 +18,7 @@
   </div>
 
   <div class="material-design">    
-    <input type='text' class="" name="idtel" id="idtel" aria-describedby="idtel" autocomplete='off' required>      
+    <input type='text' class="" name="idtel"  aria-describedby="idtel" autocomplete='off' required>      
     <span class='bar'></span> 
     <label for="idtel">IdTel</label>
     <small class="form-text text-muted">Informe seu Id tel.</small>
@@ -26,14 +26,14 @@
 
   
   <div class="material-design">    
-    <input type='text' class="" name="name" id="name" aria-describedby="name" autocomplete='off' required>      
+    <input type='text' class="" name="name"  aria-describedby="name" autocomplete='off' required>      
     <span class='bar'></span> 
     <label for="name">Nome</label>
     <small class="form-text text-muted">Informe seu nome completo.</small>
   </div>
 
   <div class="material-design">    
-    <select class="" id='id_function' name="id_function" id="id_function" aria-describedby="id_function" required>
+    <select class="" name="id_function"  aria-describedby="id_function" required>
       @foreach($functions as $item)
         <option value='{{ $item->id }}'>{{ $item->name }}</option>
       @endforeach
@@ -44,21 +44,21 @@
   </div>
 
   <div class="material-design">    
-    <input type='text' class="" name="email" id="email" aria-describedby="email" autocomplete='off' required>      
+    <input type='text' class="" name="email"  aria-describedby="email" autocomplete='off' required>      
     <span class='bar'></span> 
     <label for="email">Email</label>
     <small class="form-text text-muted">Informe seu email.</small>
   </div>
 
   <div class="material-design">    
-    <input type='password' class="" name="passwd" id="passwd" aria-describedby="passwd" autocomplete='off' required>      
+    <input type='password' class="" name="passwd"  aria-describedby="passwd" autocomplete='off' required>      
     <span class='bar'></span> 
     <label for="passwd">Senha</label>
     <small class="form-text text-muted">Informe uma senha de no minimo 6 caracteres.</small>
   </div>
 
   <div class="material-design">    
-    <input type='password' class="" name="passwd_confirm" id="passwd_confirm" aria-describedby="passwd_confirm" autocomplete='off' required>      
+    <input type='password' class="" name="passwd_confirm" aria-describedby="passwd_confirm" autocomplete='off' required>      
     <span class='bar'></span> 
     <label for="passwd_confirm">Confirme a senha</label>
     <small class="form-text text-muted">Confirme a senha.</small>

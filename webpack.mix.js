@@ -11,9 +11,12 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix
+    .js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
+    // .setResourceRoot('localhost/dev/tel_telecom/tel_auth/public/')
     // .options({
     //     processCssUrls: false
     // })
-    .sourceMaps();
+
+.sourceMaps();

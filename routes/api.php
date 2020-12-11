@@ -1,7 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+
+
+use Illuminate\Support\Facades\Route; 
+use App\Http\Controllers\Api;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,18 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
+
+// // Route::group(['namespace'=> 'App\Http\Controllers\Api','as'=>'.api'], function(){
+
+// //     Route::apiResource('/user','UserController');
+// // });
+
+// Route::middleware('auth:api')->get('/user',function(Request $request){
+//     return 'kassio';
 // });
 
-// Route::middleware('api')->get('/session/{uri}', 'SessionController@session')->name('session');   
 
-
-// Route::namespace('API')->name('api.')->group(function() {
-    // Route::get('/session/{uri}','SessionController@session')->name('session');   
-// });
-
-
-Route::group(['namespace'=>'api','as'=>'api.'], function(){
-    Route::apiResource('/session', 'SessionController');
-});
+Route::apiResource('/user','App\Http\Controllers\Api\UserController');

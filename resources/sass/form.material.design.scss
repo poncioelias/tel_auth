@@ -27,14 +27,14 @@
         }
     }
     select {
-        background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/png/arrow_select.png) right no-repeat;
+        background: url(../storage/png/arrow_select.png) right no-repeat;
         background-size: 10px;
         &:focus {
-            background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/png/arrow_select_reverse.png) right no-repeat;
+            background: url(../storage/png/arrow_select_reverse.png) right no-repeat;
             background-size: 10px;
         }
         &:valid {
-            background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/svg/checked.svg) right no-repeat;
+            background: url(../storage/svg/checked.svg) right no-repeat;
             background-size: 20px;
         }
     }
