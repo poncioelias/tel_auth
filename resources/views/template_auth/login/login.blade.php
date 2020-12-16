@@ -1,12 +1,12 @@
 
-<form id='' method='POST' action='{{ url('login') }}'>
+<form  method='POST' action='{{ url('login') }}' action-verify-user="{{ url('user/verify') }}">
 
 
   
   <div class='title mb-3'>Login</div>
 
   <div class="material-design mb-5">    
-    <select class="" id='system' name="system" id="system" aria-describedby="system" required>
+    <select class="verify-user"  name="id_system" aria-describedby="id_system" required>
       <option></option>
       @foreach($systems as $item)
         <option value='{{ $item->id }}' {{ $item->uri == $uri_system ? 'SELECTED' :'' }}> {{ $item->name  }} </option>
@@ -18,14 +18,14 @@
   </div>
 
   <div class="material-design">    
-    <input type='text' class="" name="idtel" id="idtel" aria-describedby="idtel" autocomplete='off' required>      
+    <input type='text' class="verify-user" name="idtel"  aria-describedby="idtel" autocomplete='off' required value='0102047227'>      
     <span class='bar'></span> 
     <label for="idtel">IdTel</label>
-    <small class="form-text text-muted">Informe seu Id tel.</small>
+    <small class="form-text text-muted response-verify">Informe seu Id tel.</small>
   </div>
 
   <div class="material-design">    
-    <input type='password' class="" name="password" id="password" aria-describedby="password" required>     
+    <input type='password' class="" name="password"  aria-describedby="password" required value='123'>     
     <span class='bar'></span>  
     <label for="idtel">Senha</label>
     <small class="form-text text-muted">Informe sua senha.</small>

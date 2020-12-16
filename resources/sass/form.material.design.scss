@@ -27,14 +27,14 @@
         }
     }
     select {
-        background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/png/arrow_select.png) right no-repeat;
+        background: url(../storage/png/arrow_select.png) right no-repeat;
         background-size: 10px;
         &:focus {
-            background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/png/arrow_select_reverse.png) right no-repeat;
+            background: url(../storage/png/arrow_select_reverse.png) right no-repeat;
             background-size: 10px;
         }
         &:valid {
-            background: url(http://localhost/dev/tel_telecom/_autenticacao/public/storage/svg/checked.svg) right no-repeat;
+            background: url(../storage/svg/checked.svg) right no-repeat;
             background-size: 20px;
         }
     }
@@ -153,5 +153,24 @@
     input:focus~.bar:before,
     input:focus~.bar:after {
         width: 50%;
+    }
+    .response-verify.danger {
+        color: rgb(138, 17, 17)!important;
+    }
+    .response-verify.warning {
+        color: rgb(212, 200, 25)!important;
+    }
+    .response-verify.info {
+        color: rgb(118, 125, 228) !important;
+    }
+    .response-verify.success {
+        color: rgb(28, 131, 15) !important;
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }

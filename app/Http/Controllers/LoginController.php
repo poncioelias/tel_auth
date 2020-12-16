@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\DB;
 use \Illuminate\Support\Facades\Session;
+use \App\Http\Controllers\SessionController;
+use \Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -40,6 +43,46 @@ class LoginController extends Controller
     }
 
     /**
+     * post: login
+     *
+     * @return void
+     */
+    public function store(Request $request)
+    {     
+       
+        if( in_array('',$request->only('id_system','idtel', 'password')) ){
+            $json['message'] = 'Campo(s) sem preenchimento. Verifique!';
+            $json['status'] = 'warning';
+            return response()->json($json);
+        }     
+
+              
+        $user = UserModel::user( $request->id_system, $request->idtel); 
+        if( is_object($user) )       
+            $confirm = Hash::check($request->password, $user->password);
+          
+
+        if( empty($confirm) || !is_object($user) ){
+            $json['message'] = 'Usuário e/ou senha inválido(s)!';
+            $json['status'] = 'warning';
+            return response()->json($json);
+        }   
+
+        $session = new SessionController($user); 
+        Session::put( $user->uri, $session->all()); 
+     
+        $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
+        $json['status'] = 'success';
+
+        if( $user->reset_passwd == 0 )
+            $json['redirect'] = url("/session/$user->uri");          
+        else    
+            $json['redirect'] = url('/resetpasswd');  
+
+        return response()->json($json);   
+    }
+
+    /**
      * post: register
      *
      * @param Request $request
@@ -58,13 +101,74 @@ class LoginController extends Controller
             $json['status'] = 'warning';
             return response()->json($json);    
         }
+
+
+        if( $request->password != $request->passwd_confirm){
+            $json['message'] = 'Senhas não conferem!';
+            $json['status'] = 'warning';
+            return response()->json($json);    
+        }
+
+        DB::table('tbl_users')->insert([
+          
+          
+            'name' => '',
+            'idtel' => '',
+            'password' => '',
+            'email' => '',            
+            'id_profile' => '',        
+            'profile_description' => '',
+            'id_system' => '',           
+           
+        ]);
+
        
  
         $json['message'] = '<i class="fas fa-check-circle"></i> Registro efetuado! Verifique seu email.';
         $json['status'] = 'success';
         return response()->json($json);    
-
        
+    }
+
+    /**
+     * post: register/verify
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function userVerify(Request $request)
+    {        
+        $return = [
+            ['cod'=>'0', 'message'=>'<i class="fas fa-check"></i> Este usuário já existe e está vinculado neste sistema.', 'status'=>'success'],
+            ['cod'=>'1', 'message'=>'<i class="fas fa-exclamation-triangle"></i> Este usuário já existe mas não está vinculado ao sistema selecionado.<br>Peça para o adminstrador do sistema liberá-lo no mesmo.<br>
+            <a href=# class="mt-2 btn btn-outline-info"  data-idmodal="modalDoubt" data-href="'.url('/modal/doubt').'">Dúvidas?</a></p>', 'status'=>'info'],
+            ['cod'=>'2', 'message'=>'Informe seu Id tel.', 'status'=>''],
+            ['cod'=>'3', 'message'=>'<i class="fas fa-exclamation-triangle"></i> O idtel deve conter 10 caracteres.', 'status'=>'warning'],
+            ['cod'=>'4', 'message'=>'<i class="fas fa-exclamation-triangle"></i> O idtel deve conter apenas números.', 'status'=>'warning'],
+         ];
+
+        if( ctype_alpha($request->idtel) ){
+            return response()->json($return[4]);
+        }   
+       
+
+        if( mb_strlen($request->idtel) != 10){
+            return response()->json($return[3]);
+        }
+        
+
+        $user_system = UserModel::user( $request->id_system, $request->idtel); 
+        $user = UserModel::user( null, $request->idtel); 
+       
+        if($user_system){
+            return response()->json($return[0]);
+        }
+
+        if($user){
+            return response()->json($return[1]);
+        }
+
+        return response()->json($return[2]);
     }
 
     /**
@@ -95,108 +199,5 @@ class LoginController extends Controller
        echo 'resetpasswd';
     }
 
-    /**
-     * post: login
-     *
-     * @return void
-     */
-    public function login(Request $request)
-    {     
-        if( in_array('',$request->only('system','idtel', 'password')) ){
-            $json['message'] = 'Campo(s) sem preenchimento. Verifique!';
-            $json['status'] = 'warning';
-            return response()->json($json);
-        }    
-        
-        
-        $login_data =  DB::select(
-                        DB::raw("
-                            SELECT 
-                                USR.id,
-                                USR.name,
-                                USR.idtel,
-                                USR.passwd,
-                                USR.email,
-                                USR.email_confirmation,
-                                USR.reset_passwd,
-                                FUNC.name function,
-                                PRF.id id_profile,
-                                PRF.name profile,
-                                PRF.description profile_description,
-                                SYS.id id_system,
-                                SYS.name system,
-                                SYS.uri uri,
-                                SYS.link link
-
-                            FROM _users.tbl_users USR
-                            INNER JOIN _users.tbl_users_functions FUNC ON(FUNC.id = USR.id_function)
-                            INNER JOIN _users.tbl_users_profiles PRF ON(PRF.id = USR.id_profile)
-                            INNER JOIN _users.tbl_users_systems USRSYS ON(USRSYS.id_user = USR.id)
-                            INNER JOIN _users.tbl_systems SYS ON(SYS.id = USRSYS.id_system)
-                            WHERE 
-                                SYS.id = :system
-                                AND idtel = :idtel
-                                AND passwd = :passwd
-                        "),[
-                            'system'=>$request->system,
-                            'idtel'=>$request->idtel,
-                            'passwd'=>$request->password,
-                        ]
-            );
-
-        if( !$login_data ){
-            $json['message'] = 'Usuário e/ou senha inválido(s)!';
-            $json['status'] = 'warning';
-            return response()->json($json);
-        }     
- 
-
-        // Session::put(
-        //     $login_data[0]->uri,
-        //     [
-        //     'logged' => '1',
-        //     'logged_in' => date('Y-m-d H:i:s'),
-        //     'logged_up' => date('Y-m-d H:i:s'),
-        //     'page_access_now' => '',
-        //     'link' => $login_data[0]->link,
-        //     'idtel'=> $login_data[0]->idtel,
-        //     'name'=> $login_data[0]->name,
-        //     'email'=> $login_data[0]->email,
-        //     'email_confirmation'=> $login_data[0]->email_confirmation,
-        //     'reset_passwd'=> $login_data[0]->reset_passwd,
-        //     'profile'=> $login_data[0]->profile,
-        //     'profile_description'=> $login_data[0]->profile_description,
-        //     'function'=> $login_data[0]->function,
-        //     ]
-        // );
-
-        $SESSION = [
-            $login_data[0]->uri=>    [
-                'logged' => '1',
-                'logged_in' => date('Y-m-d H:i:s'),
-                'logged_up' => date('Y-m-d H:i:s'),
-                'page_access_now' => '',
-                'link' => $login_data[0]->link,
-                'idtel'=> $login_data[0]->idtel,
-                'name'=> $login_data[0]->name,
-                'email'=> $login_data[0]->email,
-                'email_confirmation'=> $login_data[0]->email_confirmation,
-                'reset_passwd'=> $login_data[0]->reset_passwd,
-                'profile'=> $login_data[0]->profile,
-                'profile_description'=> $login_data[0]->profile_description,
-                'function'=> $login_data[0]->function,
-            ]
-            ];
-    
-
-
-        $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
-        $json['status'] = 'success';
-
-        if( $login_data[0]->reset_passwd == 0)
-            $json['redirect'] = route('api.session.index', $SESSION );
-        else    
-            $json['redirect'] = route('resetpasswd');
-        return response()->json($json);          
-    }
+   
 }

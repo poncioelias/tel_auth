@@ -27,4 +27,9 @@ class Helpers
     ";
   }
 
+
+  public function jsonEncode($item)
+  {
+   return json_encode($item, JSON_UNESCAPED_UNICODE);
+  }
 }

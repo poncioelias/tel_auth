@@ -1,12 +1,12 @@
 
-<form id='' method='POST' action='{{ url('recover') }}'>
+<form method='POST' action='{{ url('recover') }}'>
 
   @csrf
 
   <div class='title mb-3'>Redefinir senha</div>
 
   <div class="material-design">    
-    <input type='text' class="" name="idtel" id="idtel" aria-describedby="idtel" autocomplete='off' required>      
+    <input type='text' class="" name="idtel"  aria-describedby="idtel" autocomplete='off' required>      
     <span class='bar'></span> 
     <label for="idtel">IdTel</label>
     <small class="form-text text-muted">Informe seu Id tel.</small>

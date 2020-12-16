@@ -26,6 +26,6 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::group(['namespace'=>'api','as'=>'api.'], function(){
-    Route::apiResource('/session', 'SessionController');
-});
+// Route::group(['namespace'=>'api','as'=>'api.'], function(){
+//     Route::apiResource('/session', 'SessionController');
+// });

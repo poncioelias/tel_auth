@@ -1,4 +1,5 @@
 @extends('template_auth.header')
+
 @section('title', $uri_system)
 @section('content')
 
