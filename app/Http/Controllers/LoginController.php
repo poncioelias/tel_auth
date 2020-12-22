@@ -74,11 +74,13 @@ class LoginController extends Controller
         $json['message'] = '<i class="fas fa-check-circle"></i> Login efetuado! Redirecionando...';
         $json['status'] = 'success';
 
-        if( $user->reset_passwd == 0 )
-            $json['redirect'] = url("/session/$user->uri");          
+        if( $user->reset_passwd == 0 )            
+            $json['redirect'] = $user->link;         
         else    
             $json['redirect'] = url('/resetpasswd');  
 
+        $json['json'] = $session->all();
+        $json['route_session'] = $user->link . "/public/session";    
         return response()->json($json);   
     }
 

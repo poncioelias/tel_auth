@@ -74,10 +74,17 @@ $(function() {
                 }
 
                 if (response.redirect) {
-                    window.location.href = response.redirect;
+                    $.post(response.route_session, response.json);
+
+                    setTimeout(function() {
+                        window.location.href = response.redirect;
+                    }, 1000);
+
+                } else {
+                    removeScreenLoader();
                 }
 
-                removeScreenLoader();
+
                 $('form .alert-back').show();
                 $('form .alert-back').removeClass('animate__fadeOutDown').addClass('animate__animated animate__fadeInUp');
 
